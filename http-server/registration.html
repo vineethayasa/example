@@ -1,0 +1,83 @@
+<html>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet" crossorigin="anonymous">
+    <body class="flex items-center justified-center bg-indigo-300">
+        <div class ="relative px-5 pt-5 pb-5 sm:mx-auto sm:max-w-md sm:px-20 bg-indigo-100 rounded-lg">
+          <h1 class="text-center text-3xl font-bold text-indigo-500">
+            Registration Form
+          </h1>
+          <div class="space-y-6 py-10 px-2 leading-10">
+            <form id = "registration_form">
+              <label for="name" class="inline-block leading-5">
+                Name : 
+              </label>
+              <input required type="text" id="name" name="name" placeholder="Enter your full name" class="rounded inline-block text-center mb-5 focus:invalid:border-red-300">
+            <br>
+              <label for="email" class="inline-block leading-5">
+                Email id : 
+              </label>
+              <input required type="email" id="email" name="email" placeholder="Enter your email id" class="rounded inline-block text-center mb-5 focus:invalid:border-red-300">
+              <br>
+              <label for="password" class="inline-block leading-5">
+                Password : 
+              </label>
+              <input required type="password" id="password" name="password" placeholder="Enter your password" class="rounded inline-block text-center mb-5 focus:invalid:border-red-300">
+              <br>
+              <label for="dob" class="inline-block leading-5">
+                Date of Birth : 
+              </label>
+              <input required type="date" id="dob" name="dob" class="rounded inline-block text-center mb-5 focus:invalid:border-red-300">
+              <br>
+              <label for="t&c" class="inline-block leading-5">
+                Accept Terms & Conditions :
+              </label>
+              <input required type="checkbox" id="t&c" name="t&c" class="rounded inline-block text-center mb-5 focus:invalid:border-red-300">
+              <br>
+              <button type="submit" class="bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-5 rounded">
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class ="relative px-5 pr-6 pt-5 pb-5 sm:mx-auto sm:max-w-2xl sm:px-10 bg-indigo-100 rounded-lg">
+          <h1 class="text-center text-3xl font-bold text-indigo-500">
+            Entries
+          </h1>
+          <div class="space-y-6 py-5 px-2 leading-20" id ="user-entry"></div>
+        </div>       
+  </body>
+  
+  <script  src="./registration.js" ></script>
+  <script>
+    const date = document.getElementById("dob");
+    date.addEventListener("input",() => check_age(date));
+    
+    function check_age(element){
+      const x = check_date;
+      if (x){
+        element.setCustomValidity("");
+      }else{
+        element.setCustomValidity("error!! age less than 18 or greater than 55");
+      }
+    }
+  </script>
+
+  <script>
+    today_date = new Date();
+    var d = today_date.getDate();
+    var m = today_date.getMonth()+1;
+    var y = today_date.getFullYear();
+
+    if (m<10){
+       m='0'+m;
+    }
+    if (d<10){
+       d='0'+ d;
+    }
+    min_date=(y-55)+'-'+m+'-'+d;
+    max_date=(y-18)+'-'+m+'-'+d;
+    document.getElementById("dob").setAttribute('min',min_date);
+    document.getElementById("dob").setAttribute('max',max_date);
+  </script>
+
+</html>
