@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
 const todoList = require('../todo')
 
-const { all, markAsComplete, add, overdue, dueLater, dueToday} = todoList()
+const { all, markAsComplete, add, overdue, dueLater, dueToday } = todoList()
 
 const formattedDate = (d) => {
   return d.toISOString().split('T')[0]
@@ -29,15 +30,15 @@ describe('ToDolist Test Suite', () => {
     markAsComplete(0)
     expect(all[0].completed).toBe(true)
   })
-  test('retrieval of overdue items test',() => {
+  test('retrieval of overdue items test', () => {
     const sampledate = formattedDate(
       new Date(new Date().setDate(Todaydate.getDate() - 1))
     )
-    let sampletodo = { title: 'Sample overdue testcase', dueDate: sampledate, completed: false }
+    const sampletodo = { title: 'Sample overdue testcase', dueDate: sampledate, completed: false }
     add(sampletodo)
     expect(overdue()[0]).toBe(sampletodo)
   })
-  test('retrieval of due later items test',() => {
+  test('retrieval of due later items test', () => {
     const sampledate = formattedDate(
       new Date(new Date().setDate(Todaydate.getDate() + 1))
     )
@@ -45,7 +46,7 @@ describe('ToDolist Test Suite', () => {
     add(sampletodo)
     expect(dueLater()[0]).toBe(sampletodo)
   })
-  test('retrieval of due today items test',() =>{
-    expect(dueToday().length).toEqual(2);
+  test('retrieval of due today items test', () => {
+    expect(dueToday().length).toEqual(2)
   })
 })
