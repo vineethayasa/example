@@ -1,3 +1,6 @@
+/* eslint-disable no-var */
+/* eslint-disable eqeqeq */
+/* eslint-disable no-undef */
 const todoList = () => {
   all = []
   const add = (todoItem) => {
@@ -12,7 +15,7 @@ const todoList = () => {
     // of overdue items accordingly.
     arr = []
     for (let i = 0; i < all.length; i++) {
-      if (all[i].dueDate == yesterday) {
+      if (all[i].dueDate < new Date().toISOString().slice(0, 10)) {
         arr.push(all[i])
       }
     }
@@ -24,7 +27,7 @@ const todoList = () => {
     // of todo items that are due today accordingly.
     arr = []
     for (let i = 0; i < all.length; i++) {
-      if (all[i].dueDate == today) {
+      if (all[i].dueDate === new Date().toISOString().slice(0, 10)) {
         arr.push(all[i])
       }
     }
@@ -36,7 +39,7 @@ const todoList = () => {
     // of todo items that are due later accordingly.
     arr = []
     for (let i = 0; i < all.length; i++) {
-      if (all[i].dueDate == tomorrow) {
+      if (all[i].dueDate > new Date().toISOString().slice(0, 10)) {
         arr.push(all[i])
       }
     }
@@ -100,6 +103,5 @@ var overdues = todos.overdue()
 var formattedOverdues = todos.toDisplayableList(overdues)
 console.log(formattedOverdues)
 console.log('\n')
-
 
 module.exports = todoList
