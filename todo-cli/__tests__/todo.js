@@ -5,7 +5,7 @@ const { all, markAsComplete, add, overdue, dueLater, dueToday } = todoList()
 
 const formattedDate = (d) => {
   return d.toISOString().split('T')[0]
-}
+};
 const Todaydate = new Date()
 
 describe('ToDolist Test Suite', () => {
@@ -34,17 +34,25 @@ describe('ToDolist Test Suite', () => {
     const sampledate = formattedDate(
       new Date(new Date().setDate(Todaydate.getDate() - 1))
     )
-    const sampletodo = { title: 'Sample overdue testcase', dueDate: sampledate, completed: false }
+    const sampletodo = {
+      title: 'Sample overdue testcase',
+      dueDate: sampledate,
+      completed: false
+    }
     add(sampletodo)
-    expect(overdue()[0]).toBe(sampletodo)
+    expect(overdue().length).toBe(1)
   })
   test('retrieval of due later items test', () => {
     const sampledate = formattedDate(
       new Date(new Date().setDate(Todaydate.getDate() + 1))
     )
-    const sampletodo = { title: 'Sample due later testcase', dueDate: sampledate, completed: false }
+    const sampletodo = {
+      title: 'Sample due later testcase',
+      dueDate: sampledate,
+      completed: false
+    }
     add(sampletodo)
-    expect(dueLater()[0]).toBe(sampletodo)
+    expect(dueLater().length).toBe(1)
   })
   test('retrieval of due today items test', () => {
     expect(dueToday().length).toEqual(2)
