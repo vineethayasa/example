@@ -8,7 +8,7 @@
     "star:prod": "node index.js",
     "pretest": "NODE_ENV=test npx sequelize-cli db:drop && NODE_ENV=test npx sequelize-cli db:create",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install"
+    "prepare": "cd .. && husky install todo-cli/.husky"
   },
   "author": "vineetha",
   "license": "ISC",
