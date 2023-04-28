@@ -1,8 +1,14 @@
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+</style>
 <table>
   <tr>
     <th>Title</th>
     <th>Due Date</th>
-    <th>Is Completed?</th>
+    <th>Completed</th>
   </tr>
   <% for(let i=0;i<allTodos.length; i++) { %>
     <tr>
