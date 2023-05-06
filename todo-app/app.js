@@ -1,5 +1,5 @@
 const express = require('express')
-const csrf = require('csurf')
+const csrf = require('tiny-csrf')
 const app = express()
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -7,7 +7,7 @@ app.use(bodyParser.json())
 const path = require('path')
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser('shh! some secret string'))
-app.use(csrf({ cookie: true }))
+app.use(csrf('this_should_be_32_character_long', ['POST', 'PUT', 'DELETE']));
 
 const { Todo } = require('./models')
 
