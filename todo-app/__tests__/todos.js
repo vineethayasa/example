@@ -54,15 +54,15 @@ describe('Todo Application', function () {
     const latestTodo = parsedGroupedResponse.dueToday[dueTodayCount - 1]
 
     const boolStatus = !latestTodo.completed
-    const anotherRes = await agent.get('/')
-    csrfToken = extractCsrfToken(anotherRes)
+    const res1 = await agent.get('/')
+    csrfToken = extractCsrfToken(res1)
 
-    const changeTodo = await agent
+    const newResponse = await agent
       .put(`/todos/${latestTodo.id}`)
       .send({ _csrf: csrfToken, completed: boolStatus })
 
-    const UpadteTodoItemParse = JSON.parse(changeTodo.text)
-    expect(UpadteTodoItemParse.completed).toBe(true)
+    const parsedUpdateResponse = JSON.parse(newResponse.text)
+    expect(parsedUpdateResponse.completed).toBe(true)
   })
   test('Test for deleting a to-do', async () => {
     const res = await agent.get('/')
@@ -80,14 +80,14 @@ describe('Todo Application', function () {
     const latestTodo = parsedGroupedResponse.dueToday[dueTodayCount - 1]
 
     const boolStatus = !latestTodo.completed
-    const anotherRes = await agent.get('/')
-    csrfToken = extractCsrfToken(anotherRes)
+    const res1 = await agent.get('/')
+    csrfToken = extractCsrfToken(res1)
 
-    const changeTodo = await agent
+    const newResponse = await agent
       .delete(`/todos/${latestTodo.id}`)
       .send({ _csrf: csrfToken, completed: boolStatus })
 
-    const boolResponse = Boolean(changeTodo.text)
+    const boolResponse = Boolean(newResponse.text)
     expect(boolResponse).toBe(true)
   })
 
@@ -107,24 +107,24 @@ describe('Todo Application', function () {
     const latestTodo = parsedGroupedResponse.dueToday[dueTodayCount - 1]
 
     const boolStatus = !latestTodo.completed
-    let anotherRes = await agent.get('/')
-    csrfToken = extractCsrfToken(anotherRes)
+    let res1 = await agent.get('/')
+    csrfToken = extractCsrfToken(res1)
 
-    const changeTodo = await agent
+    const newResponse = await agent
       .put(`/todos/${latestTodo.id}`)
       .send({ _csrf: csrfToken, completed: boolStatus })
 
-    const UpadteTodoItemParse = JSON.parse(changeTodo.text)
-    expect(UpadteTodoItemParse.completed).toBe(true)
+    const parsedUpdateResponse = JSON.parse(newResponse.text)
+    expect(parsedUpdateResponse.completed).toBe(true)
 
-    anotherRes = await agent.get('/')
-    csrfToken = extractCsrfToken(anotherRes)
+    res1 = await agent.get('/')
+    csrfToken = extractCsrfToken(res1)
 
-    const changeTodo2 = await agent
+    const anotherResponse = await agent
       .put(`/todos/${latestTodo.id}`)
       .send({ _csrf: csrfToken, completed: !boolStatus })
 
-    const UpadteTodoItemParse2 = JSON.parse(changeTodo2.text)
-    expect(UpadteTodoItemParse2.completed).toBe(false)
+    const parsedUpdateResponse2 = JSON.parse(anotherResponse.text)
+    expect(parsedUpdateResponse2.completed).toBe(false)
   })
 })
