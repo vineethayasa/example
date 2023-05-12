@@ -28,9 +28,9 @@ app.use(session({
   secret: 'my-super-secret-key-5632147896385214',
   cookie: {
     maxAge: 24 * 60 * 60 * 1000
-    resave: false,
-    saveUninitialized: false,
   }
+   resave: false,
+   saveUninitialized: false,
 }))
 
 app.use(passport.initialize())
