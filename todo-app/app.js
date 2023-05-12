@@ -23,7 +23,7 @@ const flash = require('connect-flash')
 app.use(express.urlencoded({ extended: false }))
 const path = require('path')
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.set('views', path.join(__dirname, 'views'))
 app.use(flash())
@@ -198,8 +198,8 @@ app.post('/todos', connectEnsureLogin.ensureLoggedIn(), async (request, response
 
 app.put('/todos/:id', connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
   console.log('Mark Todo as completed:', request.params.id)
-  const todo = await Todo.findByPk(request.params.id)
   try {
+    const todo = await Todo.findByPk(request.params.id)
     const updatedtodo = await todo.setCompletionStatus(request.body.completed)
     return response.json(updatedtodo)
   } catch (error) {
