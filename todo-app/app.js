@@ -1,47 +1,50 @@
-/* eslint-disable n/handle-callback-err */
-/* eslint-disable no-unused-vars */
-const express = require('express')
-const csrf = require('tiny-csrf')
-const app = express()
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
-const path = require('path')
-app.use(express.static(path.join(__dirname, 'public')))
-app.set('views', path.join(__dirname, 'views'))
+const {request, response} = require('express');
+const express = require('express');
+const app = express();
+const csrf = require('tiny-csrf');
 
-const flash = require('connect-flash')
+const {Todo, User} = require('./models');
 
-const passport = require('passport')
-const connectEnsureLogin = require('connect-ensure-login')
-const session = require('express-session')
-const LocalStrategy = require('passport-local')
-const RedisStore = require('connect-redis')(session);
-const bcyrpt = require('bcrypt')
-const saltRounds = 10
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
-app.use(bodyParser.json())
-app.use(express.urlencoded({ extended: false }))
-app.use(cookieParser('shh! some secret string'))
-app.use(csrf('this_should_be_32_character_long', ['POST', 'PUT', 'DELETE']))
+const passport = require('passport');
+const connectEnsureLogin = require('connect-ensure-login');
+const session = require('express-session');
+const LocalStrategy = require('passport-local');
+
+const bcyrpt = require('bcrypt');
+const saltRounds = 10;
+
+const flash = require('connect-flash');
+
+
+app.use(express.urlencoded({extended: false}));
+const path = require('path');
+
+app.set('views',path.join(__dirname,'views'));
+app.use(flash());
+const user = require('./models/user');
+
+
+
+app.use(bodyParser.json());
+app.use(cookieParser('ssh!!!! some secret string'));
+app.use(csrf('this_should_be_32_character_long', ['POST', 'PUT', 'DELETE']));
 
 app.use(session({
-  secret: 'my-super-secret-key-5632147896385214',
-  cookie: {
-    maxAge: 24 * 60 * 60 * 1000
-  },
-  resave:false,
-  saveUninitialized: false,
-  store: new RedisStore({ client: redisClient }),
+  secret:"this is my secret-122333444455555",
+  cookie:{
+    maxAge: 24 * 60 * 60 * 1000 // that will be equal to 24 Hours / A whole day
+  }
 }))
 
-app.use(passport.initialize())
-app.use(passport.session())
-app.use(flash())
-
-app.use(function (request, response, next) {
-  response.locals.messages = request.flash()
-  next()
-})
+app.use(passport.initialize());
+app.use(passport.session());
+app.use((request, response, next)=>{
+  response.locals.messages = request.flash();
+  next();
+});
 
 passport.use(new LocalStrategy({
   usernameField: 'email',
