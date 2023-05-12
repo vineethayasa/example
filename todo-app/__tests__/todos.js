@@ -168,4 +168,45 @@ describe('Todo Application', function () {
     const parsedUpdateResponse2 = JSON.parse(anotherResponse.text)
     expect(parsedUpdateResponse2.completed).toBe(false)
   })
+  test('User A cannot delete User B Todos', async () => {
+    let res = await agent.get('/signup')
+    let csrfToken = extractCsrfToken(res)
+    res = await agent.post('/users').send({
+      firstName: 'Srinivas',
+      lastName: 'Reddy',
+      email: 'srini@gmail.com',
+      password: 'reddy',
+      _csrf: csrfToken
+    })
+
+    res = await agent.get('/todos')
+    csrfToken = extractCsrfToken(res)
+    res = await agent.post('/users').send({
+      firstName: 'Sandhya',
+      lastName: 'Rani',
+      email: 'sandhya@gmail.com',
+      password: 'rani',
+      _csrf: csrfToken
+    })
+    const userA = res.id
+
+    await agent.get('/signout')
+
+    res = await agent.get('/signup')
+    csrfToken = extractCsrfToken(res)
+    res = await agent.post('/users').send({
+      firstName: 'User',
+      lastName: 'B',
+      email: 'user.b@test.com',
+      password: 'userb',
+      _csrf: csrfToken
+    })
+
+    res = await agent.get('/todos')
+    csrfToken = extractCsrfToken(res)
+    const parsedResponse = await agent.delete(`/todos/${userA}`).send({
+      _csrf: csrfToken
+    })
+    expect(parsedResponse.statusCode).toBe(422)
+  })
 })
