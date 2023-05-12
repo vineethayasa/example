@@ -168,9 +168,30 @@ describe('Todo Application', function () {
     const parsedUpdateResponse2 = JSON.parse(anotherResponse.text)
     expect(parsedUpdateResponse2.completed).toBe(false)
   })
+
   test('User A cannot delete User B Todos', async () => {
     let res = await agent.get('/signup')
     let csrfToken = extractCsrfToken(res)
+    res = await agent.post('/users').send({
+      firstName: 'Sandhya',
+      lastName: 'Rani',
+      email: 'sandhya@gmail.com',
+      password: 'rani',
+      _csrf: csrfToken
+    })
+    res = await agent.get('/todos')
+    csrfToken = extractCsrfToken(res)
+    res = await agent.post('/todos').send({
+      title: 'Test todo',
+      dueDate: new Date().toISOString(),
+      completed: false,
+      _csrf: csrfToken
+    })
+    const userA = res.id
+    await agent.get('/signout')
+
+    res = await agent.get('/signup')
+    csrfToken = extractCsrfToken(res)
     res = await agent.post('/users').send({
       firstName: 'Srinivas',
       lastName: 'Reddy',
@@ -181,6 +202,14 @@ describe('Todo Application', function () {
 
     res = await agent.get('/todos')
     csrfToken = extractCsrfToken(res)
+    const parsedResponse = await agent.delete(`/todos/${userA}`).send({
+      _csrf: csrfToken
+    })
+    expect(parsedResponse.statusCode).toBe(422)
+  })
+  test('User A cannot update User B Todos', async () => {
+    let res = await agent.get('/signup')
+    let csrfToken = extractCsrfToken(res)
     res = await agent.post('/users').send({
       firstName: 'Sandhya',
       lastName: 'Rani',
@@ -188,24 +217,32 @@ describe('Todo Application', function () {
       password: 'rani',
       _csrf: csrfToken
     })
+    res = await agent.get('/todos')
+    csrfToken = extractCsrfToken(res)
+    res = await agent.post('/todos').send({
+      title: 'Test todo',
+      dueDate: new Date().toISOString(),
+      completed: false,
+      _csrf: csrfToken
+    })
     const userA = res.id
-
     await agent.get('/signout')
 
     res = await agent.get('/signup')
     csrfToken = extractCsrfToken(res)
     res = await agent.post('/users').send({
-      firstName: 'User',
-      lastName: 'B',
-      email: 'user.b@test.com',
-      password: 'userb',
+      firstName: 'Srinivas',
+      lastName: 'Reddy',
+      email: 'srini@gmail.com',
+      password: 'reddy',
       _csrf: csrfToken
     })
 
     res = await agent.get('/todos')
     csrfToken = extractCsrfToken(res)
-    const parsedResponse = await agent.delete(`/todos/${userA}`).send({
-      _csrf: csrfToken
+    const parsedResponse = await agent.put(`/todos/${userA}`).send({
+      _csrf: csrfToken,
+      completed: true
     })
     expect(parsedResponse.statusCode).toBe(422)
   })
