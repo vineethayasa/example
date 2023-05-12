@@ -6,7 +6,6 @@ const app = express()
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const path = require('path')
-const RedisStore = require('connect-redis')(session);
 app.use(express.static(path.join(__dirname, 'public')))
 app.set('views', path.join(__dirname, 'views'))
 
@@ -16,7 +15,7 @@ const passport = require('passport')
 const connectEnsureLogin = require('connect-ensure-login')
 const session = require('express-session')
 const LocalStrategy = require('passport-local')
-
+const RedisStore = require('connect-redis')(session);
 const bcyrpt = require('bcrypt')
 const saltRounds = 10
 
