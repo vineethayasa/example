@@ -1,49 +1,51 @@
-const {request, response} = require('express');
-const express = require('express');
-const app = express();
-const csrf = require('tiny-csrf');
+/* eslint-disable n/handle-callback-err */
+/* eslint-disable no-unused-vars */
+const { request, response } = require('express')
+const express = require('express')
+const app = express()
+const csrf = require('tiny-csrf')
 
-const {Todo, User} = require('./models');
+const { Todo, User } = require('./models')
 
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 
-const passport = require('passport');
-const connectEnsureLogin = require('connect-ensure-login');
-const session = require('express-session');
-const LocalStrategy = require('passport-local');
+const passport = require('passport')
+const connectEnsureLogin = require('connect-ensure-login')
+const session = require('express-session')
+const LocalStrategy = require('passport-local')
 
-const bcyrpt = require('bcrypt');
-const saltRounds = 10;
+const bcyrpt = require('bcrypt')
+const saltRounds = 10
 
-const flash = require('connect-flash');
+const flash = require('connect-flash')
 
-app.use(express.urlencoded({extended: false}));
-const path = require('path');
+app.use(express.urlencoded({ extended: false }))
+const path = require('path')
 
-app.set('views',path.join(__dirname,'views'));
-app.use(flash());
-const user = require('./models/user');
+app.use(express.static(path.join(__dirname, 'public')));
 
+app.set('views', path.join(__dirname, 'views'))
+app.use(flash())
+const user = require('./models/user')
 
-
-app.use(bodyParser.json());
-app.use(cookieParser('ssh!!!! some secret string'));
-app.use(csrf('this_should_be_32_character_long', ['POST', 'PUT', 'DELETE']));
+app.use(bodyParser.json())
+app.use(cookieParser('ssh!!!! some secret string'))
+app.use(csrf('this_should_be_32_character_long', ['POST', 'PUT', 'DELETE']))
 
 app.use(session({
-  secret:"this is my secret-122333444455555",
-  cookie:{
-    maxAge: 24 * 60 * 60 * 1000 // that will be equal to 24 Hours / A whole day
+  secret: 'this is my secret-258963147536214',
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000
   }
 }))
 
-app.use(passport.initialize());
-app.use(passport.session());
-app.use((request, response, next)=>{
-  response.locals.messages = request.flash();
-  next();
-});
+app.use(passport.initialize())
+app.use(passport.session())
+app.use((request, response, next) => {
+  response.locals.messages = request.flash()
+  next()
+})
 
 passport.use(new LocalStrategy({
   usernameField: 'email',
