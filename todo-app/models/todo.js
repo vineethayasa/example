@@ -10,11 +10,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate (models) {
-      // define association here
+      Todo.belongsTo(models.User, {
+        foreignKey: 'userId'
+      })
     }
 
-    static addTodo ({ title, dueDate }) {
-      return this.create({ title, dueDate, completed: false })
+    static addTodo ({ title, dueDate, userId }) {
+      return this.create({ title, dueDate, completed: false, userId })
     }
 
     markAsCompleted () {
@@ -25,53 +27,58 @@ module.exports = (sequelize, DataTypes) => {
       return this.findAll()
     }
 
-    static async remove (id) {
+    static async remove (id, userId) {
       return this.destroy({
         where: {
-          id
+          id,
+          userId
         }
       })
     }
 
-    static overdue () {
+    static overdue (userId) {
       return this.findAll({
         where: {
           dueDate: {
             [Op.lt]: new Date().toISOString().slice(0, 10)
           },
+          userId,
           completed: false
         },
         order: [['id', 'ASC']]
       })
     }
 
-    static dueToday () {
+    static dueToday (userId) {
       return this.findAll({
         where: {
           dueDate: {
             [Op.eq]: new Date().toISOString().slice(0, 10)
           },
+          userId,
           completed: false
         },
         order: [['id', 'ASC']]
       })
     }
 
-    static dueLater () {
+    static dueLater (userId) {
       return this.findAll({
         where: {
           dueDate: {
             [Op.gt]: new Date().toISOString().slice(0, 10)
           },
+          userId,
           completed: false
         },
         order: [['id', 'ASC']]
       })
     }
 
-    static completedItems () {
+    static completedItems (userId) {
       return this.findAll({
         where: {
+          userId,
           completed: true
         },
         order: [['id', 'ASC']]
