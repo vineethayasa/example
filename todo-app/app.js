@@ -18,7 +18,6 @@ const saltRounds = 10;
 
 const flash = require('connect-flash');
 
-
 app.use(express.urlencoded({extended: false}));
 const path = require('path');
 
@@ -77,8 +76,6 @@ passport.deserializeUser((id, done) => {
       done(error, null)
     })
 })
-
-const { Todo, User } = require('./models')
 
 app.set('view engine', 'ejs')
 app.get('/', async (request, response) => {
