@@ -6,6 +6,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const path = require('path')
+const RedisStore = require('connect-redis')(session);
 app.use(express.static(path.join(__dirname, 'public')))
 app.set('views', path.join(__dirname, 'views'))
 
@@ -31,6 +32,7 @@ app.use(session({
   },
   resave:false,
   saveUninitialized: false,
+  store: new RedisStore({ client: redisClient }),
 }))
 
 app.use(passport.initialize())
